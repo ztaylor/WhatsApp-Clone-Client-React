@@ -1,7 +1,9 @@
 schema: ../WhatsApp-Clone-Server/schema/typeDefs.ts
 documents:
-  - ./src/**/*.tsx
-  - ./src/**/*.ts
+  - ./src/components/**/*.tsx
+  - ./src/graphql/fragments/**/*.ts
+  - ./src/graphql/queries/**/*.ts
+  - ./src/graphql/subscriptions/**/*.ts
 overwrite: true
 require:
   - ts-node/../../codegen-interpreter.ts
@@ -10,3 +12,10 @@ generates:
     plugins:
       - typescript-common
       - typescript-client
+  ./src/graphql/hooks.tsx:
+    plugins:
+      - typescript-react-apollo
+    config:
+      withHooks: true
+      withSubscriptionHooks: true
+      importUseSubscriptionFrom: '../src/polyfills/react-apollo-hooks.ts'
