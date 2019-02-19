@@ -11,11 +11,10 @@ import gql from 'graphql-tag'
 import { History } from 'history'
 import * as React from 'react'
 import { useState } from 'react'
-import { useQuery, useMutation } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import * as fragments from '../../graphql/fragments'
 import * as queries from '../../graphql/queries'
-import { ChatNavbarMutation, ChatNavbarQuery, Chats } from '../../graphql/types'
+import { useChatNavbarMutation, useChatNavbarQuery, ChatsQuery } from '../../graphql/types'
 
 const Style = styled.div`
   padding: 0;
@@ -83,11 +82,10 @@ interface ChatNavbarProps {
 export default ({ chatId, history }: ChatNavbarProps) => {
   const {
     data: { chat },
-  } = useQuery<ChatNavbarQuery.Query, ChatNavbarQuery.Variables>(query, {
+  } = useChatNavbarQuery({
     variables: { chatId },
   })
-  const removeChat = useMutation<ChatNavbarMutation.Mutation, ChatNavbarMutation.Variables>(
-    mutation,
+  const removeChat = useChatNavbarMutation(
     {
       variables: { chatId },
       update: (client, { data: { removeChat } }) => {
@@ -103,7 +101,7 @@ export default ({ chatId, history }: ChatNavbarProps) => {
 
         let chats
         try {
-          chats = client.readQuery<Chats.Query>({
+          chats = client.readQuery<ChatsQuery>({
             query: queries.chats,
           }).chats
         } catch (e) {}

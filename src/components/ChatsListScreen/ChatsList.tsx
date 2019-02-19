@@ -4,11 +4,10 @@ import gql from 'graphql-tag'
 import { History } from 'history'
 import * as moment from 'moment'
 import * as React from 'react'
-import { useQuery } from 'react-apollo-hooks'
 import * as ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import * as fragments from '../../graphql/fragments'
-import { ChatsListQuery } from '../../graphql/types'
+import { useChatsListQuery } from '../../graphql/types'
 
 const Style = styled.div`
   height: calc(100% - 56px);
@@ -79,7 +78,7 @@ interface ChatsListProps {
 export default ({ history }: ChatsListProps) => {
   const {
     data: { chats },
-  } = useQuery<ChatsListQuery.Query>(query)
+  } = useChatsListQuery()
 
   const navToChat = chatId => {
     history.push(`chats/${chatId}`)

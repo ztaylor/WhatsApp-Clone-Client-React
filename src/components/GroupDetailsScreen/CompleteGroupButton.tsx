@@ -4,12 +4,11 @@ import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import gql from 'graphql-tag'
 import { History } from 'history'
 import * as React from 'react'
-import { useMutation } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import { time as uniqid } from 'uniqid'
 import * as fragments from '../../graphql/fragments'
 import * as queries from '../../graphql/queries'
-import { Chats, User, CompleteGroupButtonMutation } from '../../graphql/types'
+import { ChatsQuery, UserFragment, useCompleteGroupButtonMutation } from '../../graphql/types'
 import { useMe } from '../../services/auth.service'
 
 const Style = styled.div`
@@ -42,7 +41,7 @@ const mutation = gql`
 
 interface CompleteGroupButtonProps {
   history: History
-  users: User.Fragment[]
+  users: UserFragment[]
   groupName: string
   groupPicture: string
 }
@@ -50,10 +49,7 @@ interface CompleteGroupButtonProps {
 export default ({ history, users, groupName, groupPicture }: CompleteGroupButtonProps) => {
   const me = useMe()
 
-  const addGroup = useMutation<
-    CompleteGroupButtonMutation.Mutation,
-    CompleteGroupButtonMutation.Variables
-  >(mutation, {
+  const addGroup = useCompleteGroupButtonMutation({
     optimisticResponse: {
       __typename: 'Mutation',
       addGroup: {
@@ -82,7 +78,7 @@ export default ({ history, users, groupName, groupPicture }: CompleteGroupButton
 
       let chats
       try {
-        chats = client.readQuery<Chats.Query>({
+        chats = client.readQuery<ChatsQuery>({
           query: queries.chats,
         }).chats
       } catch (e) {}

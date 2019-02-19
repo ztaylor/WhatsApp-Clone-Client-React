@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import * as fragments from '../graphql/fragments'
-import { UsersListQuery, User } from '../graphql/types'
+import { useUsersListQuery, UserFragment } from '../graphql/types'
 
 const Style = styled.div`
   .UsersList-users-list {
@@ -54,8 +54,8 @@ const query = gql`
 
 interface UsersListProps {
   selectable?: boolean
-  onSelectionChange?: (users: User.Fragment[]) => void
-  onUserPick?: (user: User.Fragment) => void
+  onSelectionChange?: (users: UserFragment[]) => void
+  onUserPick?: (user: UserFragment) => void
 }
 
 export default (props: UsersListProps) => {
@@ -69,7 +69,7 @@ export default (props: UsersListProps) => {
   const [selectedUsers, setSelectedUsers] = useState([])
   const {
     data: { users },
-  } = useQuery<UsersListQuery.Query>(query)
+  } = useUsersListQuery()
 
   const onListItemClick = user => {
     if (!selectable) {

@@ -4,11 +4,10 @@ import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { useState } from 'react'
-import { useQuery, useMutation } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import { time as uniqid } from 'uniqid'
 import * as fragments from '../../graphql/fragments'
-import { MessageBoxMutation, FullChat, Message } from '../../graphql/types'
+import { useMessageBoxMutation, FullChatFragment } from '../../graphql/types'
 import { useMe } from '../../services/auth.service'
 
 const Style = styled.div`
@@ -63,8 +62,7 @@ export default ({ chatId }: MessageBoxProps) => {
   const [message, setMessage] = useState('')
   const me = useMe()
 
-  const addMessage = useMutation<MessageBoxMutation.Mutation, MessageBoxMutation.Variables>(
-    mutation,
+  const addMessage = useMessageBoxMutation(
     {
       variables: {
         chatId,
@@ -100,7 +98,7 @@ export default ({ chatId }: MessageBoxProps) => {
 
         let fullChat
         try {
-          fullChat = client.readFragment<FullChat.Fragment>({
+          fullChat = client.readFragment<FullChatFragment>({
             id: defaultDataIdFromObject(addMessage.chat),
             fragment: fragments.fullChat,
             fragmentName: 'FullChat',

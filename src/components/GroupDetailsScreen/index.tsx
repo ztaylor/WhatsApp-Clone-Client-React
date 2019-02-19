@@ -4,12 +4,11 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { useState, useEffect } from 'react'
 import { MutationHookOptions } from 'react-apollo-hooks'
-import { useQuery, useMutation } from 'react-apollo-hooks'
 import { Redirect } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import * as fragments from '../../graphql/fragments'
-import { GroupDetailsScreenQuery, GroupDetailsScreenMutation, User } from '../../graphql/types'
+import { useGroupDetailsScreenQuery, useGroupDetailsScreenMutation, UserFragment } from '../../graphql/types'
 import { useMe } from '../../services/auth.service'
 import { pickPicture, uploadProfilePicture } from '../../services/picture.service'
 import Navbar from '../Navbar'
@@ -94,8 +93,8 @@ export default ({ location, match, history }: RouteComponentProps) => {
   const me = useMe()
 
   let ownedByMe: boolean
-  let users: User.Fragment[]
-  let participants: User.Fragment[]
+  let users: UserFragment[]
+  let participants: UserFragment[]
   let updateChat: () => any
   let chatNameState
   let chatPictureState
@@ -104,7 +103,7 @@ export default ({ location, match, history }: RouteComponentProps) => {
   if (chatId) {
     const {
       data: { chat },
-    } = useQuery<GroupDetailsScreenQuery.Query, GroupDetailsScreenQuery.Variables>(query, {
+    } = useGroupDetailsScreenQuery({
       variables: { chatId },
     })
     ownedByMe = chat.owner.id === me.id
@@ -123,10 +122,7 @@ export default ({ location, match, history }: RouteComponentProps) => {
     const [chatName] = chatNameState
     const [chatPicture] = chatPictureState
 
-    updateChat = useMutation<
-      GroupDetailsScreenMutation.Mutation,
-      GroupDetailsScreenMutation.Variables
-    >(mutation, {
+    updateChat = useGroupDetailsScreenMutation({
       variables: {
         chatId,
         name: chatName,

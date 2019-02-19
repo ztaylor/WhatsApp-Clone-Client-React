@@ -107,7 +107,7 @@ const Style = styled.div`
 export default ({ history, location }: RouteComponentProps) => (
   <Style className="AuthScreen Screen">
     <div className="AuthScreen-intro">
-      <img src="assets/whatsapp-icon.png" className="AuthScreen-icon" />
+      <img src="./assets/whatsapp-icon.png" className="AuthScreen-icon" />
       <h2 className="AuthScreen-title">WhatsApp Clone</h2>
     </div>
     <AnimatedSwitch>

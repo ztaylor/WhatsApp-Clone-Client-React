@@ -8,14 +8,15 @@ overwrite: true
 require:
   - ts-node/../../codegen-interpreter.ts
 generates:
-  ./src/graphql/types.ts:
+  ./src/graphql/types.tsx:
     plugins:
       - typescript-common
       - typescript-client
-  ./src/graphql/hooks.tsx:
-    plugins:
       - typescript-react-apollo
     config:
+      noHOC: true
+      noComponents: true
+      noNamespaces: true
       withHooks: true
       withSubscriptionHooks: true
-      importUseSubscriptionFrom: '../src/polyfills/react-apollo-hooks.ts'
+      importUseSubscriptionFrom: '../polyfills/react-apollo-hooks'

@@ -8,7 +8,7 @@ import { useQuery, useMutation } from 'react-apollo-hooks'
 import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import * as fragments from '../../graphql/fragments'
-import { SettingsFormMutation } from '../../graphql/types'
+import { useSettingsFormMutation } from '../../graphql/types'
 import { useMe } from '../../services/auth.service'
 import { pickPicture, uploadProfilePicture } from '../../services/picture.service'
 import Navbar from '../Navbar'
@@ -65,8 +65,7 @@ export default ({ history }: RouteComponentProps) => {
   const [myName, setMyName] = useState(me.name)
   const [myPicture, setMyPicture] = useState(me.picture)
 
-  const updateUser = useMutation<SettingsFormMutation.Mutation, SettingsFormMutation.Variables>(
-    mutation,
+  const updateUser = useSettingsFormMutation(
     {
       variables: { name: myName, picture: myPicture },
       optimisticResponse: {

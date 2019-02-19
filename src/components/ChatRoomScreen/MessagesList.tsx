@@ -2,11 +2,10 @@ import gql from 'graphql-tag'
 import * as moment from 'moment'
 import * as React from 'react'
 import { useRef, useEffect } from 'react'
-import { useQuery, useMutation } from 'react-apollo-hooks'
 import * as ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import * as fragments from '../../graphql/fragments'
-import { MessagesListQuery } from '../../graphql/types'
+import { useMessagesListQuery } from '../../graphql/types'
 
 const Style = styled.div`
   display: block;
@@ -107,7 +106,7 @@ export default ({ chatId }: MessagesListProps) => {
     data: {
       chat: { messages, isGroup },
     },
-  } = useQuery<MessagesListQuery.Query, MessagesListQuery.Variables>(query, {
+  } = useMessagesListQuery({
     variables: { chatId },
   })
   const selfRef = useRef(null)

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
 import * as isEqual from 'react-fast-compare'
 
-export type SubscriptionOptions<T, TVariables> = {
+export type SubscriptionHookOptions<T, TVariables> = {
   variables?: TVariables
   fetchPolicy?: FetchPolicy
   onSubscriptionData?: (options?: { client?: DataProxy; subscriptionData?: T }) => any
@@ -13,7 +13,7 @@ export type SubscriptionOptions<T, TVariables> = {
 
 export const useSubscription = <T, TVariables = OperationVariables>(
   query: DocumentNode,
-  options: SubscriptionOptions<T, TVariables> = {},
+  options: SubscriptionHookOptions<T, TVariables> = {},
 ): {
   data: T | { [key: string]: void }
   error?: GraphQLError

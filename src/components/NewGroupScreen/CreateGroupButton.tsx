@@ -3,7 +3,7 @@ import AddIcon from '@material-ui/icons/Add'
 import { History } from 'history'
 import * as React from 'react'
 import styled from 'styled-components'
-import { User } from '../../graphql/types'
+import { UserFragment } from '../../graphql/types'
 
 const Style = styled.div`
   position: fixed;
@@ -22,7 +22,7 @@ const Style = styled.div`
 
 interface CreateGroupButtonProps {
   history: History
-  users: User.Fragment[]
+  users: UserFragment[]
 }
 
 export default ({ history, users }: CreateGroupButtonProps) => {

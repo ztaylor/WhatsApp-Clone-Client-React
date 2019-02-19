@@ -3,21 +3,20 @@ import * as fragments from '../graphql/fragments'
 import * as subscriptions from '../graphql/subscriptions'
 import * as queries from '../graphql/queries'
 import {
-  ChatUpdated,
-  MessageAdded,
-  Message,
-  Chats,
-  FullChat,
-  User,
-  Users,
-  UserAdded,
-  UserUpdated,
-  ChatAdded,
+  useChatUpdated,
+  useMessageAdded,
+  MessageFragment,
+  ChatsQuery,
+  FullChatFragment,
+  UsersQuery,
+  useUserAdded,
+  useUserUpdated,
+  useChatAdded,
 } from '../graphql/types'
 import { useSubscription } from '../polyfills/react-apollo-hooks'
 
 export const useSubscriptions = () => {
-  useSubscription<ChatAdded.Subscription>(subscriptions.chatAdded, {
+  useChatAdded({
     onSubscriptionData: ({ client, subscriptionData: { chatAdded } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(chatAdded),
@@ -28,7 +27,7 @@ export const useSubscriptions = () => {
 
       let chats
       try {
-        chats = client.readQuery<Chats.Query>({
+        chats = client.readQuery<ChatsQuery>({
           query: queries.chats,
         }).chats
       } catch (e) {}
@@ -44,7 +43,7 @@ export const useSubscriptions = () => {
     },
   })
 
-  useSubscription<ChatUpdated.Subscription>(subscriptions.chatUpdated, {
+  useChatUpdated({
     onSubscriptionData: ({ client, subscriptionData: { chatUpdated } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(chatUpdated),
@@ -55,9 +54,9 @@ export const useSubscriptions = () => {
     },
   })
 
-  useSubscription<MessageAdded.Subscription>(subscriptions.messageAdded, {
+  useMessageAdded({
     onSubscriptionData: ({ client, subscriptionData: { messageAdded } }) => {
-      client.writeFragment<Message.Fragment>({
+      client.writeFragment<MessageFragment>({
         id: defaultDataIdFromObject(messageAdded),
         fragment: fragments.message,
         data: messageAdded,
@@ -65,7 +64,7 @@ export const useSubscriptions = () => {
 
       let fullChat
       try {
-        fullChat = client.readFragment<FullChat.Fragment>({
+        fullChat = client.readFragment<FullChatFragment>({
           id: defaultDataIdFromObject(messageAdded.chat),
           fragment: fragments.fullChat,
           fragmentName: 'FullChat',
@@ -86,7 +85,7 @@ export const useSubscriptions = () => {
 
       let chats
       try {
-        chats = client.readQuery<Chats.Query>({
+        chats = client.readQuery<ChatsQuery>({
           query: queries.chats,
         }).chats
       } catch (e) {}
@@ -106,7 +105,7 @@ export const useSubscriptions = () => {
     },
   })
 
-  useSubscription<UserAdded.Subscription>(subscriptions.userAdded, {
+  useUserAdded({
     onSubscriptionData: ({ client, subscriptionData: { userAdded } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(userAdded),
@@ -116,7 +115,7 @@ export const useSubscriptions = () => {
 
       let users
       try {
-        users = client.readQuery<Users.Query>({
+        users = client.readQuery<UsersQuery>({
           query: queries.users,
         }).users
       } catch (e) {}
@@ -132,7 +131,7 @@ export const useSubscriptions = () => {
     },
   })
 
-  useSubscription<UserUpdated.Subscription>(subscriptions.userUpdated, {
+  useUserUpdated({
     onSubscriptionData: ({ client, subscriptionData: { userUpdated } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(userUpdated),

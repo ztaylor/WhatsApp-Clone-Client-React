@@ -8,8 +8,8 @@ import styled from 'styled-components'
 import { time as uniqid } from 'uniqid'
 import * as fragments from '../../graphql/fragments'
 import * as queries from '../../graphql/queries'
-import { Chats } from '../../graphql/types'
-import { NewChatScreenMutation } from '../../graphql/types'
+import { ChatsQuery } from '../../graphql/types'
+import { useNewChatScreenMutation } from '../../graphql/types'
 import { useMe } from '../../services/auth.service'
 import Navbar from '../Navbar'
 import UsersList from '../UsersList'
@@ -39,8 +39,7 @@ const mutation = gql`
 export default ({ history }: RouteComponentProps) => {
   const me = useMe()
 
-  const addChat = useMutation<NewChatScreenMutation.Mutation, NewChatScreenMutation.Variables>(
-    mutation,
+  const addChat = useNewChatScreenMutation(
     {
       update: (client, { data: { addChat } }) => {
         client.writeFragment({
@@ -52,7 +51,7 @@ export default ({ history }: RouteComponentProps) => {
 
         let chats
         try {
-          chats = client.readQuery<Chats.Query>({
+          chats = client.readQuery<ChatsQuery>({
             query: queries.chats,
           }).chats
         } catch (e) {}
