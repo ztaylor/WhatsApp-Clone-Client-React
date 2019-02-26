@@ -69,7 +69,7 @@ export default (props: UsersListProps) => {
   const [selectedUsers, setSelectedUsers] = useState([])
   const {
     data: { users },
-  } = useUsersListQuery()
+  } = useUsersListQuery({ suspend: true })
 
   const onListItemClick = user => {
     if (!selectable) {

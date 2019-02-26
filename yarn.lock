@@ -4788,12 +4788,34 @@ graphql-codegen-core@0.17.0:
     ts-log "2.1.4"
     winston "3.2.1"
 
+graphql-codegen-core@0.18.0-alpha.ab8245eb:
+  version "0.18.0-alpha.ab8245eb"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-core/-/graphql-codegen-core-0.18.0-alpha.ab8245eb.tgz#112669bd7f990a85cc02b8a06ebddf3fea513771"
+  integrity sha512-SCtWcUeWOjZ7DK1vytlIKYxzyPTwMmGnriH8AjkBNHK1hPw5Gr96Px5AAetJmqhuBcbWdXjo/iS0svI43BRlMQ==
+  dependencies:
+    chalk "2.4.2"
+    change-case "3.1.0"
+    common-tags "1.8.0"
+    graphql-tag "2.10.1"
+    graphql-toolkit "0.0.5"
+    graphql-tools "4.0.4"
+    ts-log "2.1.4"
+    winston "3.2.1"
+
 graphql-codegen-plugin-helpers@0.17.0:
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/graphql-codegen-plugin-helpers/-/graphql-codegen-plugin-helpers-0.17.0.tgz#f65edde8a0810c457a85171d2e8bd0d29c8c7ac3"
   integrity sha512-zcTvtvJqGrGTUjM9qz4vGml967uORX5yeSBc9n4du+Ah+y4TLG0GdjmEqfP7Jokwb8YpCGKivY6hXF8AZ7yPdw==
   dependencies:
     graphql-codegen-core "0.17.0"
+    import-from "2.1.0"
+
+graphql-codegen-plugin-helpers@0.18.0-alpha.ab8245eb:
+  version "0.18.0-alpha.ab8245eb"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-plugin-helpers/-/graphql-codegen-plugin-helpers-0.18.0-alpha.ab8245eb.tgz#aa1e275abda36af55243a6234c00f35fe610ab99"
+  integrity sha512-JwY5zHQZQaNg79HvEgtverzPThTouGljZaPHeEaHPd3icjlTKWGMm9IDBDa9X16oGDh4CYT0ssbzMqk6LKJmQg==
+  dependencies:
+    graphql-codegen-core "0.18.0-alpha.ab8245eb"
     import-from "2.1.0"
 
 graphql-codegen-typescript-client@0.17.0:
@@ -4815,14 +4837,24 @@ graphql-codegen-typescript-common@0.17.0:
     graphql-codegen-core "0.17.0"
     graphql-codegen-plugin-helpers "0.17.0"
 
-graphql-codegen-typescript-react-apollo@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/graphql-codegen-typescript-react-apollo/-/graphql-codegen-typescript-react-apollo-0.17.0.tgz#1ea7162afaf7ea2a3cc581cff141837581948c81"
-  integrity sha512-xG8Rs+pu84ZHlxasjbEhQrcbJv42WXC0hlT5WNPWCgsdF3TpVKHaNepUm12gDPO13RmNuXsmn3VLa/xpn2eNrw==
+graphql-codegen-typescript-common@0.18.0-alpha.ab8245eb:
+  version "0.18.0-alpha.ab8245eb"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-typescript-common/-/graphql-codegen-typescript-common-0.18.0-alpha.ab8245eb.tgz#191d183fb568cf975a50d83f6f1d9c511094984f"
+  integrity sha512-JUMOr+4bUrwgXDpezdEkxoNzVQGjiGsECFhZ/lN14T+jwBtVA1Ethp23Ij9/raWAuPbXrYurGSjlGjaiKnJfrQ==
   dependencies:
-    graphql-codegen-core "0.17.0"
-    graphql-codegen-plugin-helpers "0.17.0"
-    graphql-codegen-typescript-common "0.17.0"
+    change-case "3.1.0"
+    common-tags "1.8.0"
+    graphql-codegen-core "0.18.0-alpha.ab8245eb"
+    graphql-codegen-plugin-helpers "0.18.0-alpha.ab8245eb"
+
+graphql-codegen-typescript-react-apollo@^0.18.0-alpha.ab8245eb:
+  version "0.18.0-alpha.ab8245eb"
+  resolved "https://registry.yarnpkg.com/graphql-codegen-typescript-react-apollo/-/graphql-codegen-typescript-react-apollo-0.18.0-alpha.ab8245eb.tgz#003b9d5c44e52bf7ccb1ad3e674489d75168fc0e"
+  integrity sha512-b0IMSaQkQxn9Zh9vRFbTZJ7Kpe8ZouYb/9mb9aXDsRRpnR5ZmHYVdjwInGz6TPEKbXA6d4Mz1/4f7zOJwcaa3w==
+  dependencies:
+    graphql-codegen-core "0.18.0-alpha.ab8245eb"
+    graphql-codegen-plugin-helpers "0.18.0-alpha.ab8245eb"
+    graphql-codegen-typescript-common "0.18.0-alpha.ab8245eb"
 
 graphql-config@2.2.1:
   version "2.2.1"
@@ -9010,10 +9042,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo-hooks@0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.3.1.tgz#6049d5883b809d28ba24277e584a099d49697c7b"
-  integrity sha512-HF519dUBOmpS1DTtbPnd6EO/2nHUV7OtJYyoHlX3wdKWwV06CnwJp88Kmp1aUD0Gkg623znQjGsXwHAb8AtYTA==
+react-apollo-hooks@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.4.1.tgz#563c4168a1e6b79c1fae75996aa13d7cc88843a8"
+  integrity sha512-pDeeB2djHEZrffbx2/TJDuUI960KDYYGpkEwpeKUPx+NBT4hYFpnza/NwRKXPENDInr1BNSdnWIf4vE/iIkYLg==
   dependencies:
     lodash "^4.17.11"
 

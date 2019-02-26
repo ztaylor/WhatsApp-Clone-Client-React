@@ -17,7 +17,7 @@ import { useSubscription } from '../polyfills/react-apollo-hooks'
 
 export const useSubscriptions = () => {
   useChatAdded({
-    onSubscriptionData: ({ client, subscriptionData: { chatAdded } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data: { chatAdded } } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(chatAdded),
         fragment: fragments.chat,
@@ -44,7 +44,7 @@ export const useSubscriptions = () => {
   })
 
   useChatUpdated({
-    onSubscriptionData: ({ client, subscriptionData: { chatUpdated } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data: { chatUpdated } } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(chatUpdated),
         fragment: fragments.chat,
@@ -55,7 +55,7 @@ export const useSubscriptions = () => {
   })
 
   useMessageAdded({
-    onSubscriptionData: ({ client, subscriptionData: { messageAdded } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data: { messageAdded } } }) => {
       client.writeFragment<MessageFragment>({
         id: defaultDataIdFromObject(messageAdded),
         fragment: fragments.message,
@@ -106,7 +106,7 @@ export const useSubscriptions = () => {
   })
 
   useUserAdded({
-    onSubscriptionData: ({ client, subscriptionData: { userAdded } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data: { userAdded } } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(userAdded),
         fragment: fragments.user,
@@ -132,7 +132,7 @@ export const useSubscriptions = () => {
   })
 
   useUserUpdated({
-    onSubscriptionData: ({ client, subscriptionData: { userUpdated } }) => {
+    onSubscriptionData: ({ client, subscriptionData: { data: { userUpdated } } }) => {
       client.writeFragment({
         id: defaultDataIdFromObject(userUpdated),
         fragment: fragments.user,

@@ -1,4 +1,4 @@
-schema: ../WhatsApp-Clone-Server/schema/typeDefs.ts
+schema: ../WhatsApp-Clone-Server/schema.ts
 documents:
   - ./src/components/**/*.tsx
   - ./src/graphql/fragments/**/*.ts
@@ -19,4 +19,3 @@ generates:
       noNamespaces: true
       withHooks: true
       withSubscriptionHooks: true
-      importUseSubscriptionFrom: '../polyfills/react-apollo-hooks'

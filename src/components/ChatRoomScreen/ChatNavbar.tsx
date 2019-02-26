@@ -84,6 +84,7 @@ export default ({ chatId, history }: ChatNavbarProps) => {
     data: { chat },
   } = useChatNavbarQuery({
     variables: { chatId },
+    suspend: true,
   })
   const removeChat = useChatNavbarMutation(
     {

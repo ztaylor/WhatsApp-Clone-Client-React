@@ -105,6 +105,7 @@ export default ({ location, match, history }: RouteComponentProps) => {
       data: { chat },
     } = useGroupDetailsScreenQuery({
       variables: { chatId },
+      suspend: true,
     })
     ownedByMe = chat.owner.id === me.id
     users = chat.allTimeMembers

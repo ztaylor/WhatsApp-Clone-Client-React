@@ -78,7 +78,7 @@ interface ChatsListProps {
 export default ({ history }: ChatsListProps) => {
   const {
     data: { chats },
-  } = useChatsListQuery()
+  } = useChatsListQuery({ suspend: true })
 
   const navToChat = chatId => {
     history.push(`chats/${chatId}`)
