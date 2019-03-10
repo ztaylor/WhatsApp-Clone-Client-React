@@ -1,12 +1,13 @@
+import { List, ListItem } from '@material-ui/core'
 import moment from 'moment'
 import * as React from 'react'
 import { chats } from '../../db'
 
 const ChatsList = () => (
   <div>
-    <ul>
+    <List>
       {chats.map((chat) => (
-        <li key={chat.id}>
+        <ListItem key={chat.id} button>
           <img src={chat.picture} />
           <div>{chat.name}</div>
           {chat.lastMessage && (
@@ -15,9 +16,9 @@ const ChatsList = () => (
               <div>{moment(chat.lastMessage.createdAt).format('HH:mm')}</div>
             </React.Fragment>
           )}
-        </li>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   </div>
 )
 

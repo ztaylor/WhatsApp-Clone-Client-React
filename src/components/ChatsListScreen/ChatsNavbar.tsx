@@ -1,9 +1,10 @@
+import { Toolbar } from '@material-ui/core'
 import * as React from 'react'
 
 const ChatsNavbar = () => (
-  <div>
+  <Toolbar>
     Whatsapp Clone
-  </div>
+  </Toolbar>
 )
 
 export default ChatsNavbar
