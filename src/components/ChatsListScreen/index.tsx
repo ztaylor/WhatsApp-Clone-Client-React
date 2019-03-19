@@ -7,10 +7,10 @@ const Container = styled.div `
   height: 100vh;
 `
 
-const ChatsListScreen = () => (
+const ChatsListScreen = ({ history }) => (
   <Container>
     <ChatsNavbar />
-    <ChatsList />
+    <ChatsList history={history} />
   </Container>
 )
 
