@@ -1,3 +1,4 @@
+import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { useCallback } from 'react'
@@ -55,15 +56,27 @@ const ChatRoomScreen = ({ history, match }) => {
         }
       },
       update: (client, { data: { addMessage } }) => {
-        client.writeQuery({
-          query: getChatQuery,
-          variables: { chatId },
-          data: {
-            chat: {
-              ...chat,
-              messages: chat.messages.concat(addMessage),
-            },
-          },
+        let fullChat
+        try {
+          fullChat = client.readFragment({
+            id: defaultDataIdFromObject(chat),
+            fragment: fragments.fullChat,
+            fragmentName: 'FullChat',
+          })
+        } catch (e) {
+          return
+        }
+
+        if (fullChat.messages.some(m => m.id === message.id)) return
+
+        fullChat.messages.push(addMessage)
+        fullChat.lastMessage = addMessage
+
+        client.writeFragment({
+          id: defaultDataIdFromObject(chat),
+          fragment: fragments.fullChat,
+          fragmentName: 'FullChat',
+          data: fullChat,
         })
 
         rewriteChats:
@@ -89,7 +102,6 @@ const ChatRoomScreen = ({ history, match }) => {
 
           const chat = chats[chatIndex]
 
-          chat.lastMessage = addMessage
           // The chat will appear at the top of the ChatsList component
           chats.splice(chatIndex, 1)
           chats.unshift(chat)
