@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import ChatNavbar from './ChatNavbar'
 import MessageInput from './MessageInput'
 import MessagesList from './MessagesList'
+import * as queries from '../../graphql/queries'
 
 const Container = styled.div `
   background: url(/assets/chat-background.jpg);
@@ -70,6 +71,40 @@ const ChatRoomScreen = ({ history, match }) => {
             },
           },
         })
+
+        rewriteChats:
+        {
+          let data
+          try {
+            data = client.readQuery({
+              query: queries.chats,
+            })
+          } catch (e) {
+            break rewriteChats
+          }
+
+          if (!data) break rewriteChats
+
+          const chats = data.chats
+
+          if (!chats) break rewriteChats
+
+          const chatIndex = chats.findIndex(c => c.id === chatId)
+
+          if (chatIndex === -1) break rewriteChats
+
+          const chat = chats[chatIndex]
+
+          chat.lastMessage = addMessage
+          // The chat will appear at the top of the ChatsList component
+          chats.splice(chatIndex, 1)
+          chats.unshift(chat)
+
+          client.writeQuery({
+            query: queries.chats,
+            data: { chats: chats },
+          })
+        }
       },
     })
   }, [chat])
