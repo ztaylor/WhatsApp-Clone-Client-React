@@ -1,14 +1,12 @@
-import { defaultDataIdFromObject } from 'apollo-cache-inmemory';
-import gql from 'graphql-tag';
 import React from 'react';
 import { useCallback } from 'react';
-import { useQuery, useMutation } from 'react-apollo-hooks';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import ChatNavbar from './ChatNavbar';
 import MessageInput from './MessageInput';
 import MessagesList from './MessagesList';
 import { History } from 'history';
+import { useGetChatQuery, useAddMessageMutation } from '../../graphql/types';
 import * as queries from '../../graphql/queries';
 import * as fragments from '../../graphql/fragments';
 
@@ -19,25 +17,7 @@ import * as fragments from '../../graphql/fragments';
   height: 100vh;
 `;
 
-const getChatQuery = gql`
-  query GetChat($chatId: ID!) {
-    chat(chatId: $chatId) {
-      ...FullChat
-    }
-  }
-  ${fragments.fullChat}
-`;
-
-const addMessageMutation = gql `
-  mutation AddMessage($chatId: ID!, $content: String!) {
-    addMessage(chatId: $chatId, content: $content) {
-      ...Message
-    }
-  }
-  ${fragments.message}
-`;
-
-interface ChatRoomScreenParams { 
+interface ChatRoomScreenParams {
   chatId: string
   history: History;
 };
@@ -62,10 +42,8 @@ interface ChatsResult {
 }
 
 const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => {
-  const { data: { chat } } = useQuery<any>(getChatQuery, {
-    variables: { chatId }
-  });
-  const addMessage = useMutation(addMessageMutation);
+
+  const addMessage = useAddMessageMutation();
 
   const onSendMessage = useCallback((content: string) => {
     addMessage({
@@ -82,7 +60,7 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
       update: (client, { data: { addMessage } }) => {
         type FullChat = { [key: string]: any };
         let fullChat;
-        const chatId = defaultDataIdFromObject(chat);
+        const chatId = addMessage.id;
 
         if (chatId === null) {
           return;
@@ -144,9 +122,19 @@ const ChatRoomScreen: React.FC<ChatRoomScreenParams> = ({ history, chatId }) => 
         });
       },
     })
-  }, [chat, chatId, addMessage]);
+  }, [chatId, addMessage]);
 
-  if (!chat) return null;
+  const { data, loading } = useGetChatQuery({
+    variables: { chatId }
+  });
+  if (data === undefined) {
+    return null;
+  }
+  const chat = data.chat;
+  const loadingChat = loading;
+
+  if (loadingChat) return null;
+  if (chat === null) return null;
 
   return (
     <Container>
