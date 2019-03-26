@@ -10,6 +10,7 @@ import MessagesList from './MessagesList'
 import { useGetChatQuery, useAddMessageMutation } from '../../graphql/types'
 import * as queries from '../../graphql/queries'
 import * as fragments from '../../graphql/fragments'
+import { writeMessage } from '../../services/cache.service'
 
 const Container = styled.div `
   background: url(/assets/chat-background.jpg);
@@ -57,61 +58,7 @@ const ChatRoomScreen = ({ history, match }) => {
         }
       },
       update: (client, { data: { addMessage } }) => {
-        let fullChat
-        try {
-          fullChat = client.readFragment({
-            id: defaultDataIdFromObject(chat),
-            fragment: fragments.fullChat,
-            fragmentName: 'FullChat',
-          })
-        } catch (e) {
-          return
-        }
-
-        if (fullChat.messages.some(m => m.id === message.id)) return
-
-        fullChat.messages.push(addMessage)
-        fullChat.lastMessage = addMessage
-
-        client.writeFragment({
-          id: defaultDataIdFromObject(chat),
-          fragment: fragments.fullChat,
-          fragmentName: 'FullChat',
-          data: fullChat,
-        })
-
-        rewriteChats:
-        {
-          let data
-          try {
-            data = client.readQuery({
-              query: queries.chats,
-            })
-          } catch (e) {
-            break rewriteChats
-          }
-
-          if (!data) break rewriteChats
-
-          const chats = data.chats
-
-          if (!chats) break rewriteChats
-
-          const chatIndex = chats.findIndex(c => c.id === chatId)
-
-          if (chatIndex === -1) break rewriteChats
-
-          const chat = chats[chatIndex]
-
-          // The chat will appear at the top of the ChatsList component
-          chats.splice(chatIndex, 1)
-          chats.unshift(chat)
-
-          client.writeQuery({
-            query: queries.chats,
-            data: { chats: chats },
-          })
-        }
+        writeMessage(client, addMessage)
       },
     })
   }, [chat])
