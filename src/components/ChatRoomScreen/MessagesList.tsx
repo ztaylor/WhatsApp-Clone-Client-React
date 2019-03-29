@@ -2,7 +2,7 @@ import moment from 'moment'
 import * as React from 'react'
 import { useEffect, useRef } from 'react'
 import * as ReactDOM from 'react-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled.div`
   display: block;
@@ -12,8 +12,6 @@ const Container = styled.div`
 `
 
 const MessageItem = styled.div `
-  float: right;
-  background-color: #dcf8c6;
   display: inline-block;
   position: relative;
   max-width: 100%;
@@ -30,17 +28,33 @@ const MessageItem = styled.div `
   }
 
   &::before {
-    background-image: url(/assets/message-mine.png);
     content: '';
     position: absolute;
     bottom: 3px;
     width: 12px;
     height: 19px;
-    right: -11px;
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: contain;
   }
+
+  ${props => props.isMine ? css `
+    float: right;
+    background-color: #dcf8c6;
+
+    &::before {
+      right: -11px;
+      background-image: url(/assets/message-mine.png);
+    }
+  ` : css `
+    float: left;
+    background-color: #fff;
+
+    &::before {
+      left: -11px;
+      background-image: url(/assets/message-other.png);
+    }
+  `}
 `
 
 const Contents = styled.div `
@@ -74,7 +88,11 @@ const MessagesList = ({ messages }) => {
   return (
     <Container ref={selfRef}>
       {messages.map((message) => (
-        <MessageItem data-testid="message-item" key={message.id}>
+        <MessageItem
+          data-testid="message-item"
+          isMine={message.isMine}
+          key={message.id}
+        >
           <Contents data-testid="message-content">{message.content}</Contents>
           <Timestamp data-testid="message-date">{moment(message.createdAt).format('HH:mm')}</Timestamp>
         </MessageItem>
