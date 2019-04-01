@@ -1,5 +1,7 @@
 import moment from 'moment'
 import * as React from 'react'
+import { useEffect, useRef } from 'react'
+import * as ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -59,15 +61,26 @@ const Timestamp = styled.div `
   font-size: 12px;
 `
 
-const MessagesList = ({ messages }) => (
-  <Container>
-    {messages.map((message) => (
-      <MessageItem key={message.id}>
-        <Contents>{message.content}</Contents>
-        <Timestamp>{moment(message.createdAt).format('HH:mm')}</Timestamp>
-      </MessageItem>
-    ))}
-  </Container>
-)
+const MessagesList = ({ messages }) => {
+  const selfRef = useRef(null)
+
+  useEffect(() => {
+    if (!selfRef.current) return
+
+    const selfDOMNode = ReactDOM.findDOMNode(selfRef.current) as HTMLElement
+    selfDOMNode.scrollTop = Number.MAX_SAFE_INTEGER
+  }, [messages.length])
+
+  return (
+    <Container ref={selfRef}>
+      {messages.map((message) => (
+        <MessageItem key={message.id}>
+          <Contents>{message.content}</Contents>
+          <Timestamp>{moment(message.createdAt).format('HH:mm')}</Timestamp>
+        </MessageItem>
+      ))}
+    </Container>
+  )
+}
 
 export default MessagesList
