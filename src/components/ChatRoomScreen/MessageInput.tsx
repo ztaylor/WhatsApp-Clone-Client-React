@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/Send'
 import * as React from 'react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -43,17 +43,11 @@ const SendButton = styled(Button) `
 const MessageInput = ({ onSendMessage }) => {
   const [message, setMessage] = useState('')
 
-  const onKeyPress = e => {
-    if (e.charCode === 13) {
-      submitMessage()
-    }
-  }
-
-  const onChange = ({ target }) => {
+  const onChange = useCallback(({ target }) => {
     setMessage(target.value)
-  }
+  }, [true])
 
-  const submitMessage = () => {
+  const submitMessage = useCallback(() => {
     if (!message) return
 
     setMessage('')
@@ -61,7 +55,13 @@ const MessageInput = ({ onSendMessage }) => {
     if (typeof onSendMessage === 'function') {
       onSendMessage(message)
     }
-  }
+  }, [message, onSendMessage])
+
+  const onKeyPress = useCallback((e) => {
+    if (e.charCode === 13) {
+      submitMessage()
+    }
+  }, [submitMessage])
 
   return (
     <Container>

@@ -38,6 +38,7 @@ export type MutationAddMessageArgs = {
 };
 
 export type Query = {
+  me?: Maybe<User>;
   chats: Array<Chat>;
   chat?: Maybe<Chat>;
 };
@@ -86,10 +87,21 @@ export type MessageFragment = { __typename?: "Message" } & Pick<
   "id" | "createdAt" | "content" | "isMine"
 > & { chat: Maybe<{ __typename?: "Chat" } & Pick<Chat, "id">> };
 
+export type UserFragment = { __typename?: "User" } & Pick<
+  User,
+  "id" | "name" | "picture"
+>;
+
 export type ChatsQueryVariables = {};
 
 export type ChatsQuery = { __typename?: "Query" } & {
   chats: Array<{ __typename?: "Chat" } & ChatFragment>;
+};
+
+export type MeQueryVariables = {};
+
+export type MeQuery = { __typename?: "Query" } & {
+  me: Maybe<{ __typename?: "User" } & UserFragment>;
 };
 
 export type MessageAddedSubscriptionVariables = {};
@@ -131,6 +143,13 @@ export const FullChatFragmentDoc = gql`
   }
   ${ChatFragmentDoc}
   ${MessageFragmentDoc}
+`;
+export const UserFragmentDoc = gql`
+  fragment User on User {
+    id
+    name
+    picture
+  }
 `;
 export const GetChatDocument = gql`
   query GetChat($chatId: ID!) {
@@ -183,6 +202,23 @@ export function useChatsQuery(
 ) {
   return ReactApolloHooks.useQuery<ChatsQuery, ChatsQueryVariables>(
     ChatsDocument,
+    baseOptions
+  );
+}
+export const MeDocument = gql`
+  query Me {
+    me {
+      ...User
+    }
+  }
+  ${UserFragmentDoc}
+`;
+
+export function useMeQuery(
+  baseOptions?: ReactApolloHooks.QueryHookOptions<MeQueryVariables>
+) {
+  return ReactApolloHooks.useQuery<MeQuery, MeQueryVariables>(
+    MeDocument,
     baseOptions
   );
 }
