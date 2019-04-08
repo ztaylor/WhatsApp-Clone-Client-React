@@ -110,21 +110,33 @@ const Button = styled(MaterialButton) `
 `
 
 export default ({ history }) => {
-  const [userId, setUserId] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
-  const onUserIdChange = useCallback(({ target }) => {
-    setUserId(target.value)
+  const onUsernameChange = useCallback(({ target }) => {
+    setError('')
+    setUsername(target.value)
+  }, [true])
+
+  const onPasswordChange = useCallback(({ target }) => {
+    setError('')
+    setPassword(target.value)
   }, [true])
 
   const maySignIn = useCallback(() => {
-    return !!userId
-  }, [userId])
+    return !!(username && password)
+  }, [username, password])
 
   const handleSignIn = useCallback(() => {
-    signIn(userId).then(() => {
-      history.replace('/chats')
-    })
-  }, [userId])
+    signIn({ username, password })
+      .then(() => {
+        history.push('/chats')
+      })
+      .catch(error => {
+        setError(error.message || error)
+      })
+  }, [username, password])
 
   return (
     <Container>
@@ -137,12 +149,21 @@ export default ({ history }) => {
           <Legend>Sign in</Legend>
           <Section>
             <TextField
-              data-testid="user-id-input"
-              label="User ID"
-              value={userId}
-              onChange={onUserIdChange}
+              className="AuthScreen-text-field"
+              label="Username"
+              value={username}
+              onChange={onUsernameChange}
               margin="normal"
-              placeholder="Enter current user ID"
+              placeholder="Enter your username"
+            />
+            <TextField
+              className="AuthScreen-text-field"
+              label="Password"
+              type="password"
+              value={password}
+              onChange={onPasswordChange}
+              margin="normal"
+              placeholder="Enter your password"
             />
           </Section>
           <Button
