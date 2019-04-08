@@ -61,6 +61,24 @@ export const signIn = ({ username, password }) => {
   });
 }
 
+export const signUp = ({ name, username, password, passwordConfirm }) => {
+  return client.mutate({
+    mutation: gql`
+      mutation signUp($name: String!, $username: String!, $password: String!, $passwordConfirm: String!) {
+        signUp(name: $name, username: $username, password: $password, passwordConfirm: $passwordConfirm) {
+          id
+        }
+      }
+    `,
+    variables: {
+      name,
+      username,
+      password,
+      passwordConfirm
+    }
+  })
+}
+
 export const signOut = () => {
   document.cookie = `authToken=;expires=${new Date(0)}`
 
