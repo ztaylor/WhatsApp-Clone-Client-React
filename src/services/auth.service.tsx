@@ -60,6 +60,22 @@ export const signIn = ({ username, password }) => {
   })
 }
 
+export const signUp = ({ name, username, password, passwordConfirm }) => {
+  return fetch(`${process.env.REACT_APP_SERVER_URL}/sign-up`, {
+    method: 'POST',
+    body: JSON.stringify({ name, username, password, passwordConfirm }),
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }).then(res => {
+    if (res.status >= 400) {
+      return res.text().then(e => Promise.reject(e))
+    }
+  })
+}
+
 export const signOut = () => {
   document.cookie = `authToken=;expires=${new Date(0)}`
 
