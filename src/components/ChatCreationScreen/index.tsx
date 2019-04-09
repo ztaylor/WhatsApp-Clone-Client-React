@@ -6,6 +6,7 @@ import * as fragments from '../../graphql/fragments'
 import UsersList from '../UsersList'
 import ChatCreationNavbar from './ChatCreationNavbar'
 import { useAddChatMutation } from '../../graphql/types'
+import { writeChat } from '../../services/cache.service'
 
 const Container = styled.div `
   height: calc(100% - 56px);
@@ -26,7 +27,11 @@ gql`
 `
 
 export default ({ history }) => {
-  const addChat = useAddChatMutation()
+  const addChat = useAddChatMutation({
+    update: (client, { data: { addChat } }) => {
+      writeChat(client, addChat)
+    }
+  })
 
   const onUserPick = useCallback((user) => {
     addChat({
