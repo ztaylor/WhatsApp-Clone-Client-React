@@ -40,7 +40,7 @@ export const UsersListQuery = gql`
   ${fragments.user}
 `
 
-const UsersList = () => {
+const UsersList = ({ onUserPick = (user: User) => {} }) => {
   const { data: { users }, loading: loadingUsers } = useUsersListQuery()
 
   return (
@@ -48,6 +48,8 @@ const UsersList = () => {
       {!loadingUsers && users.map(user => (
         <UserItem
           key={user.id}
+          data-testid="user"
+          onClick={onUserPick.bind(null, user)}
           button
         >
           <ProfilePicture data-testid="picture" src={user.picture} />
