@@ -2,6 +2,7 @@ import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { useCallback } from 'react'
+import { Redirect } from 'react-router-dom'
 import { useApolloClient, useQuery, useMutation } from 'react-apollo-hooks'
 import styled from 'styled-components'
 import ChatNavbar from './ChatNavbar'
@@ -69,6 +70,13 @@ const ChatRoomScreen = ({ history, match }) => {
   }, [chat])
 
   if (loadingChat) return null
+
+  // Chat was probably removed from cache by the subscription handler
+  if (!chat) {
+    return (
+      <Redirect to="/chats" />
+    )
+  }
 
   return (
     <Container>

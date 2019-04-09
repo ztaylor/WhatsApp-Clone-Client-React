@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import * as React from 'react'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { eraseChat } from '../../services/cache.service'
 import { useRemoveChatMutation } from '../../graphql/types'
 
 const Container = styled(Toolbar) `
@@ -56,6 +57,9 @@ const ChatNavbar = ({ chat, history }) => {
   const removeChat = useRemoveChatMutation({
     variables: {
       chatId: chat.id
+    },
+    update: (client, { data: { removeChat } }) => {
+      eraseChat(client, removeChat)
     }
   })
 

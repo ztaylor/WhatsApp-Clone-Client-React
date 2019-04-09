@@ -3,7 +3,13 @@ import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import * as fragments from '../graphql/fragments'
 import * as queries from '../graphql/queries'
-import { MessageFragment, ChatFragment, useMessageAddedSubscription, useChatAddedSubscription } from '../graphql/types'
+import {
+  MessageFragment,
+  ChatFragment,
+  useMessageAddedSubscription,
+  useChatAddedSubscription,
+  useChatRemovedSubscription,
+} from '../graphql/types'
 
 type Client = ApolloClient<any> | DataProxy
 
@@ -17,6 +23,12 @@ export const useCacheService = () => {
   useChatAddedSubscription({
     onSubscriptionData: ({ client, subscriptionData: { data: { chatAdded } } }) => {
       writeChat(client, chatAdded)
+    }
+  })
+
+  useChatRemovedSubscription({
+    onSubscriptionData: ({ client, subscriptionData: { data: { chatRemoved } } }) => {
+      eraseChat(client, chatRemoved)
     }
   })
 }
@@ -110,6 +122,50 @@ export const writeChat = (client: Client, chat: ChatFragment) => {
     client.writeQuery({
       query: queries.chats,
       data: { chats },
+    })
+  }
+}
+
+export const eraseChat = (client: Client, chatId: string) => {
+  const chatType = {
+    __typename: 'Chat',
+    id: chatId
+  }
+
+  client.writeFragment({
+    id: defaultDataIdFromObject(chatType),
+    fragment: fragments.fullChat,
+    fragmentName: 'FullChat',
+    data: null,
+  })
+
+  rewriteChats:
+  {
+    let data
+    try {
+      data = client.readQuery({
+        query: queries.chats,
+      })
+    } catch (e) {
+      break rewriteChats
+    }
+
+    if (!data) break rewriteChats
+
+    const chats = data.chats
+
+    if (!chats) break rewriteChats
+
+    const chatIndex = chats.findIndex(c => c.id === chatId)
+
+    if (chatIndex === -1) break rewriteChats
+
+    // The chat will appear at the top of the ChatsList component
+    chats.splice(chatIndex, 1)
+
+    client.writeQuery({
+      query: queries.chats,
+      data: { chats: chats },
     })
   }
 }
