@@ -1,9 +1,17 @@
 import { parse as parseCookie } from 'cookie'
 import * as React from 'react'
+import { useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import client from '../client'
+import { useMeQuery, User } from '../graphql/types'
 import { useCacheService } from './cache.service'
 import gql from 'graphql-tag';
+
+const MyContext = React.createContext<User>(null)
+
+export const useMe = () => {
+  return useContext(MyContext)
+}
 
 export const withAuth = (Component: React.ComponentType) => {
   return (props) => {
@@ -17,10 +25,22 @@ export const withAuth = (Component: React.ComponentType) => {
       )
     }
 
+    const { data, error, loading } = useMeQuery()
+
     useCacheService()
 
+    if (loading) return null
+
+    if (error || !data.me) {
+      signOut()
+
+      return <Redirect to="/sign-in" />
+    }
+
     return (
-      <Component {...props} />
+      <MyContext.Provider value={data.me}>
+        <Component {...props} />
+      </MyContext.Provider>
     )
   }
 }
